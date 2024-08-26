@@ -11,7 +11,7 @@ module.exports.index=async(req,res)=>{
         const title=new RegExp(req.query.keyword,'i');
         find.title=title;
     }
-    
+
     //Sắp xếp theo trường nào đó
     const sort={};
     if(req.query.sortKey && req.query.sortValue){
@@ -42,5 +42,16 @@ module.exports.detail=async(req,res)=>{
         res.json(task);
     } catch (error) {
         res.json({message: 'Task not found'});
+    }
+}
+
+module.exports.changeStatus =async(req,res)=>{
+    try {
+        const ids=req.body.ids;
+        const status=req.body.status;
+        await Task.updateMany({_id:{$in:ids}},{status:status}); 
+        res.json({message: 'Cập nhật dữ liệu thành công'});
+    } catch (error) {
+        res.json({message: 'Not Found'});
     }
 }

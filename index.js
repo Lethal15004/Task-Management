@@ -5,6 +5,12 @@ const http = require('http');
 require('dotenv').config()//Nhúng file .env vào dự án
 
 
+//Phần body-parser -> Để lấy dữ liệu từ form và fetch (Quan trọng phải có)
+const bodyParser = require('body-parser');//Nhúng body-parser vào dự án
+const { title } = require('process');
+app.use(bodyParser.urlencoded({ extended: false }))//Nhận dữ liệu từ form
+app.use(bodyParser.json());//Nhận dữ liệu từ fetch
+
 const database=require('./config/database');
 database.connect();
 
