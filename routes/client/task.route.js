@@ -8,6 +8,7 @@ router.get('/detail/:idTask',taskController.detail);
 
 router.patch('/change-status',taskController.changeStatus);
 router.patch('/edit/:idTask',taskController.edit);
+router.patch('/delete',taskController.delete);
 
 router.post('/create',taskController.create);
 
