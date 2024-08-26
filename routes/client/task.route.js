@@ -8,4 +8,6 @@ router.get('/detail/:idTask',taskController.detail);
 
 router.patch('/change-status',taskController.changeStatus);
 
+router.post('/create',taskController.create);
+
 module.exports=router

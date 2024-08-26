@@ -55,3 +55,13 @@ module.exports.changeStatus =async(req,res)=>{
         res.json({message: 'Not Found'});
     }
 }
+
+module.exports.create=async(req,res)=>{
+    const data=req.body;
+    const newTask= new Task(data);
+    await newTask.save();
+    res.json({
+        message:'Tạo mới công việc thành công',
+        task:newTask
+    });
+}
