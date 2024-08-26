@@ -65,3 +65,14 @@ module.exports.create=async(req,res)=>{
         task:newTask
     });
 }
+
+module.exports.edit=async(req, res)=>{
+    try {
+        const id =req.params.idTask;
+        const dataChange=req.body;
+        await Task.updateOne({_id:id},dataChange);
+        res.json({message: 'Thay đổi dữ liệu thành công'});
+    } catch (error) {
+        res.json({message: 'Not Found'});
+    }
+}
