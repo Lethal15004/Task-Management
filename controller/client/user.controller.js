@@ -124,9 +124,9 @@ module.exports.resetPassword=async(req,res)=>{
 
 module.exports.profile= async (req, res) => {
     try {
-        const id = req.params.id;
+        const token = req.tokenVerify;
         const user = await User.findOne({
-            _id: id,
+            token: token,
             deleted: false
         }).select('-token -password');
         res.json({

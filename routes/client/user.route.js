@@ -3,7 +3,10 @@ const router=express.Router();
 
 const userController=require('../../controller/client/user.controller');
 
-router.get('/profile/:id',userController.profile); //trang cá nhân
+//middleware
+const authMiddleware = require('../../middleware/auth.middleware');
+
+router.get('/profile',authMiddleware,userController.profile); //trang cá nhân
 
 router.post('/register',userController.register);  //đăng ký
 
