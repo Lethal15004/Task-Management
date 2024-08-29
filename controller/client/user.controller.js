@@ -121,3 +121,24 @@ module.exports.resetPassword=async(req,res)=>{
         message: 'Đổi mật khẩu thành công'
     })
 }
+
+module.exports.profile= async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await User.findOne({
+            _id: id,
+            deleted: false
+        }).select('-token -password');
+        res.json({
+            code:200,
+            message: 'Trang cá nhân',
+            user: user
+        })
+    } catch (error) {
+        res.json({
+            code:400,
+            message: 'Not Found'
+        })
+    }
+    
+}
