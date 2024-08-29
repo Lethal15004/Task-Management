@@ -8,4 +8,6 @@ router.post('/register',userController.register);  //đăng ký
 router.post('/login',userController.login);  //đăng nhập
 
 router.post('/password/forgot',userController.forgotPassword);  //quên mật khẩu
+
+router.post('/password/otp',userController.confirmOTP);// Xác nhận OPT
 module.exports=router

@@ -70,7 +70,7 @@ module.exports.forgotPassword= async(req,res)=>{
     const dataSave={
         email: user.email,
         otp:generateRandomHelper.generateRandomNumber(6),
-        expireAt: Date.now() + 3*60*1000
+        expireAt: Date.now() + 10*60*1000
     }
     const forgotPassword=new ForgotPassword(dataSave);
     await forgotPassword.save();
@@ -82,5 +82,28 @@ module.exports.forgotPassword= async(req,res)=>{
     res.json({
         code:200,
         message: 'Đã gửi mã OTP vào email'
+    })
+}
+
+module.exports.confirmOTP=async(req,res)=>{
+    const {email,otp}=req.body;
+    const result = await ForgotPassword.findOne({
+        email:email,
+        otp:otp,
+    })
+    if(!result){
+        return res.json({
+            code:400,
+            message: 'Mã OTP không đúng'
+        });
+    }
+    const user=await User.findOne({
+        email:email,
+        deleted:false,
+    })
+    res.json({
+        code:200,
+        message: 'Xác thực mã OTP thành công',
+        token:user.token
     })
 }
