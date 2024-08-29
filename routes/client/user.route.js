@@ -10,4 +10,6 @@ router.post('/login',userController.login);  //đăng nhập
 router.post('/password/forgot',userController.forgotPassword);  //quên mật khẩu
 
 router.post('/password/otp',userController.confirmOTP);// Xác nhận OPT
+
+router.patch('/password/reset',userController.resetPassword)
 module.exports=router

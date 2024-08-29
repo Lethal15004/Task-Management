@@ -107,3 +107,17 @@ module.exports.confirmOTP=async(req,res)=>{
         token:user.token
     })
 }
+
+module.exports.resetPassword=async(req,res)=>{
+    const {token,password} = req.body;
+    const user= await User.updateOne({
+        token:token,
+        deleted:false,
+    },{
+        password:md5(password)
+    })
+    res.json({
+        code:200,
+        message: 'Đổi mật khẩu thành công'
+    })
+}
