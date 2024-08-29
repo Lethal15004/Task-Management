@@ -1,7 +1,9 @@
 const User=require('../../model/user.model');
+const ForgotPassword=require('../../model/forgot-password.model');
 const md5=require('md5');
 
-const generateToken = require('../../helper/generateToken.helper');
+const generateRandomHelper = require('../../helper/generateToken.helper');
+const sendEmailHelper=require('../../helper/sendEmail.helper');
 const { json } = require('body-parser');
 
 module.exports.register= async (req,res)=>{
@@ -14,7 +16,7 @@ module.exports.register= async (req,res)=>{
         });
     }
     dataRegister.password=md5(dataRegister.password);
-    dataRegister.token=generateToken.generateRandomString(30);
+    dataRegister.token=generateRandomHelper.generateRandomString(30);
     
     const newUser=new User(dataRegister);
     await newUser.save();
@@ -50,4 +52,35 @@ module.exports.login= async(req,res)=>{
         message: 'Đăng nhập thành công',
         token: user.token
     });
+}
+
+module.exports.forgotPassword= async(req,res)=>{
+    const {email}=req.body;
+    const user = await User.findOne({
+        email:email,
+        deleted:false,
+    })
+    if(!user){
+        return res.json({
+            code:400,
+            message: 'Email không tồn tại'
+        });
+    }
+    // Việc 1: Lưu email, OTP vào database
+    const dataSave={
+        email: user.email,
+        otp:generateRandomHelper.generateRandomNumber(6),
+        expireAt: Date.now() + 3*60*1000
+    }
+    const forgotPassword=new ForgotPassword(dataSave);
+    await forgotPassword.save();
+
+    // Việc 2: Gửi mã OTP qua email của user
+    const subject= 'Mã OTP lấy lại mật khẩu';
+    const html = `Mã OTP xác thực của bạn là <b style="color: black;">${forgotPassword.otp}</b>. Mã OTP có hiệu lực trong 3 phút. Vui lòng không cung cấp mã OTP cho người khác`;
+    sendEmailHelper.sendEmail(email,subject,html);
+    res.json({
+        code:200,
+        message: 'Đã gửi mã OTP vào email'
+    })
 }
