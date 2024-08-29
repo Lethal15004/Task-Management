@@ -58,6 +58,7 @@ module.exports.changeStatus =async(req,res)=>{
 
 module.exports.create=async(req,res)=>{
     const data=req.body;
+    data.createdBy=req.user.id;
     const newTask= new Task(data);
     await newTask.save();
     res.json({

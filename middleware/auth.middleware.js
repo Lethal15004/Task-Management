@@ -27,6 +27,7 @@ module.exports=async(req,res,next)=>{
             message:"Token không hợp lệ"
         })
     }
+    req.user=user
     req.tokenVerify=token
     next();
 }
