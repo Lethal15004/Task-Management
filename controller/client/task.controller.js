@@ -1,8 +1,13 @@
 const Task=require('../../model/task.model');
 const User=require('../../model/user.model');
 module.exports.index=async(req,res)=>{
+    const idUser=req.user.id;
     //Lọc theo trạng thái và tìm kiếm 
     const find={
+        $or:[
+            {createdBy: idUser},
+            {listUser:idUser},
+        ],
         deleted:false
     }
     if(req.query.status){
