@@ -1,4 +1,5 @@
 const Task=require('../../model/task.model');
+const User=require('../../model/user.model');
 module.exports.index=async(req,res)=>{
     //Lọc theo trạng thái và tìm kiếm 
     const find={
@@ -59,6 +60,24 @@ module.exports.changeStatus =async(req,res)=>{
 module.exports.create=async(req,res)=>{
     const data=req.body;
     data.createdBy=req.user.id;
+    if(req.body.listUser){
+        for(const idUser of req.body.listUser){
+            try {
+                const user=await User.findOne({_id:idUser});
+                if(!user){
+                    res.json({
+                        code:400,
+                        message:`User không tồn tại`
+                    })
+                }
+            } catch (error) {
+                res.json({
+                    code:400,
+                    message:`User không tồn tại`
+                })
+            }
+        }
+    }
     const newTask= new Task(data);
     await newTask.save();
     res.json({
